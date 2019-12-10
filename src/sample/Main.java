@@ -2,11 +2,18 @@ package sample;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,11 +27,27 @@ import javafx.stage.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
+// http://www.javafxchina.net/blog/docs/tutorial3/
 public class Main extends Application {
+
+    private final TableView<Person> table = new TableView<>();
+    final HBox hb = new HBox();
+
+    // 数据源
+    private final ObservableList<Person> data =
+            FXCollections.observableArrayList(
+                    new Person("Jacob", "Smith", "jacob.smith@example.com"),
+                    new Person("Isabella", "Johnson", "isabella.johnson@example.com"),
+                    new Person("Ethan", "Williams", "ethan.williams@example.com"),
+                    new Person("Emma", "Jones", "emma.jones@example.com"),
+                    new Person("Michael", "Brown", "michael.brown@example.com")
+            );
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -38,7 +61,7 @@ public class Main extends Application {
         grid.setPadding(new Insets(25, 25, 25, 25));//设置Padding，顺序是：上、右、下、左
 
 
-        Scene scene = new Scene(grid, 300, 300);//新建Scene，并将网格式Panel置于其中
+        Scene scene = new Scene(grid, 750, 340);//新建Scene，并将网格式Panel置于其中
         scene.getStylesheets().add(Main.class.getClassLoader().getResource("Login.css").toExternalForm());
         primaryStage.setScene(scene);//设置场景
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -48,12 +71,189 @@ public class Main extends Application {
             }
         });
         primaryStage.getIcons().add(new Image(Main.class.getClassLoader().getResource("icon.jpg").toString()));
-        primaryStage.show();
 
-        loginWin(grid);
+        tableWin(grid, primaryStage);
+        // loginWin(grid);
         // girdWin(grid);
         // dialog();
 
+
+        primaryStage.show();
+    }
+
+    private void tableWin(GridPane grid, Stage primaryStage) {
+
+        // 设置 table 可修改
+        table.setEditable(true);
+
+        // 每个Table的列
+        TableColumn<Person, String> firstNameCol = new TableColumn<>("First Name");
+        // 设置宽度
+        firstNameCol.setMinWidth(100);
+        // 设置分箱的类下面的属性名
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("firstName"));
+        // 设置为可编辑的
+        firstNameCol.setCellFactory(TextFieldTableCell.<Person>forTableColumn());
+        firstNameCol.setOnEditCommit(
+                (TableColumn.CellEditEvent<Person, String> t) -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setFirstName(t.getNewValue()));
+
+        TableColumn<Person, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setCellFactory(TextFieldTableCell.<Person>forTableColumn());
+        lastNameCol.setOnEditCommit((TableColumn.CellEditEvent<Person, String> t) -> {
+            ((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setLastName(t.getNewValue());
+        });
+
+        TableColumn<Person, String> emailCol = new TableColumn<>("Email");
+        emailCol.setMinWidth(200);
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        emailCol.setCellFactory(TextFieldTableCell.<Person>forTableColumn());
+        emailCol.setOnEditCommit((TableColumn.CellEditEvent<Person, String> t) -> {
+            ((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setEmail(t.getNewValue());
+        });
+
+        // 设置数据源
+        table.setItems(data);
+        // 一次添加列进TableView
+        table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+
+        // grid.add(table, 0, 0);
+        grid.add(table, 0, 1, 4, 1);
+
+
+        // 创建3个文本编辑框
+        final TextField addFirstName = new TextField();
+        addFirstName.setPromptText("First Name");
+
+        // 设置宽度
+        addFirstName.setPrefWidth(100);
+
+        final TextField addLastName = new TextField();
+        addLastName.setPrefWidth(100);
+        addLastName.setPromptText("Last Name");
+
+        final TextField addEmail = new TextField();
+        addEmail.setPrefWidth(195);
+        addEmail.setPromptText("Email");
+
+
+        // 创建一个添加按钮
+        final Button addButton = new Button("添加");
+        // 设置按钮的事件响应
+        addButton.setOnAction((ActionEvent e) -> {
+            // 数据源添加一行
+            data.add(new Person(
+                    addFirstName.getText(),
+                    addLastName.getText(),
+                    addEmail.getText()
+            ));
+            // 清空文本
+            addFirstName.clear();
+            addLastName.clear();
+            addEmail.clear();
+        });
+
+        grid.add(addFirstName, 0, 2);
+        grid.add(addLastName, 1, 2);
+        grid.add(addEmail, 2, 2);
+        grid.add(addButton, 3, 2);
+
+        // 创建右键菜单
+        MenuBar menuBar = new MenuBar();
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem menu1 = new MenuItem("MenuItem");
+        menu1.setOnAction(event -> {
+            ObservableList<Person> selectedItems = table.getSelectionModel().getSelectedItems();
+            for (Person selectedItem : selectedItems) {
+                System.out.println(selectedItem);
+            }
+        });
+
+        // 普通菜单
+        Menu menu2 = new Menu("Menu - MenuItem");
+        menu2.getItems().add(new MenuItem("New"));
+        menu2.getItems().add(new MenuItem("Save"));
+        menu2.getItems().add(new SeparatorMenuItem());
+        menu2.getItems().add(new MenuItem("Exit"));
+
+        // 多选
+        Menu menu3 = new Menu("Menu - CheckMenuItem");
+        CheckMenuItem item1 = new CheckMenuItem();
+        item1.setText("3");
+        item1.setSelected(true);
+        menu3.getItems().add(item1);
+
+        CheckMenuItem item2 = new CheckMenuItem();
+        item2.setText("2");
+        item2.setSelected(false);
+        menu3.getItems().add(item2);
+
+
+        // 单选
+        Menu menu4 = new Menu("Menu - ToggleGroup - RadioMenuItem");
+        ToggleGroup tGroup = new ToggleGroup();
+
+        RadioMenuItem soundAlarmItem = new RadioMenuItem();
+        soundAlarmItem.setToggleGroup(tGroup);
+        soundAlarmItem.setText("1");
+
+        RadioMenuItem stopAlarmItem = new RadioMenuItem();
+        stopAlarmItem.setToggleGroup(tGroup);
+        stopAlarmItem.setText("2");
+        stopAlarmItem.setSelected(true);
+
+        menu4.getItems().add(soundAlarmItem);
+        menu4.getItems().add(stopAlarmItem);
+
+        // 多选 - 子菜单
+        Menu menu5 = new Menu("Menu - CheckMenuItem");
+        menu5.getItems().add(
+                new CheckMenuItem("A"));
+        menu5.getItems().add(
+                new CheckMenuItem("B"));
+        menu5.getItems().add(new CheckMenuItem("C"));
+        menu4.getItems().add(menu5);
+
+        contextMenu.getItems().addAll(menu1, menu2, menu3, menu4);
+
+        menuBar.getMenus().addAll(menu2, menu3, menu4);
+        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+        // 菜单按钮
+        grid.add(menuBar, 0, 0,4, 1);
+
+        // 列表框添加右键菜单
+        table.setOnContextMenuRequested(event -> contextMenu.show(table, event.getScreenX(), event.getScreenY()));
+
+
+        // 选择列表框
+        String[] pros = Arrays.stream(Pos.values()).map(Enum::toString).collect(Collectors.toList()).toArray(new String[]{});
+
+        final ChoiceBox<String> choiceBox = new ChoiceBox<String>(
+                FXCollections.observableArrayList(pros));
+
+        choiceBox.getSelectionModel().selectedIndexProperty()
+                .addListener(new ChangeListener<Number>() {
+                    public void changed(ObservableValue ov, Number value, Number new_value) {
+                        String pro = pros[new_value.intValue()];
+                        System.out.println(pro);
+                        grid.setAlignment(Pos.valueOf(pro));
+                    }
+                });
+
+        choiceBox.setTooltip(new Tooltip("Select a Pro"));
+        grid.add(choiceBox, 0, 3);
+
+
+        // 刷新 Style
+        final Button tmp = new Button("刷新 Style");
+        grid.add(tmp, 1, 3);
+        tmp.setOnAction(event -> {
+
+        });
     }
 
     private void dialog() {
