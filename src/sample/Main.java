@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -42,11 +43,11 @@ public class Main extends Application {
     // 数据源
     private final ObservableList<Person> data =
             FXCollections.observableArrayList(
-                    new Person("Jacob", "Smith", "jacob.smith@example.com"),
-                    new Person("Isabella", "Johnson", "isabella.johnson@example.com"),
-                    new Person("Ethan", "Williams", "ethan.williams@example.com"),
-                    new Person("Emma", "Jones", "emma.jones@example.com"),
-                    new Person("Michael", "Brown", "michael.brown@example.com")
+                    new Person("https://img2018.cnblogs.com/blog/1309478/201905/1309478-20190503124346847-433585445.png", "Jacob", "Smith", "jacob.smith@example.com"),
+                    new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Isabella", "Johnson", "isabella.johnson@example.com"),
+                    new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Ethan", "Williams", "ethan.williams@example.com"),
+                    new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "void", "Jones", "emma.jones@example.com"),
+                    new Person("https://fanyi.bdstatic.com/static/translation/img/header/logo_cbfea26.png", "Michael", "Brown", "michael.brown@example.com")
             );
 
     @Override
@@ -70,6 +71,8 @@ public class Main extends Application {
                 Platform.exit();
             }
         });
+
+        // 设置程序图标
         primaryStage.getIcons().add(new Image(Main.class.getClassLoader().getResource("icon.jpg").toString()));
 
         tableWin(grid, primaryStage);
@@ -85,8 +88,46 @@ public class Main extends Application {
 
         // 设置 table 可修改
         table.setEditable(true);
+        table.setId("tableView");
 
         // 每个Table的列
+        TableColumn<Person, String> iconCol = new TableColumn<>("Icon");
+        iconCol.setMinWidth(100);
+        iconCol.setCellFactory((col) -> {
+            TableCell<Person, String> cell = new TableCell<Person, String>() {
+
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                        ImageView imgIcon = null;
+                        try {
+                            String url = this.getTableView().getItems().get(this.getIndex()).getIcon();
+                            imgIcon = new ImageView(new Image(Utils.getImageStream(url)));
+                            imgIcon.setFitHeight(100);
+                            imgIcon.setFitWidth(100);
+                            // 保留 width：height 比率
+                            imgIcon.setPreserveRatio(true);
+                            // Button delBtn = new Button("删除", imgIcon);
+                            // imgIcon.setPadding(new Insets(25, 25, 25, 25));//设置Padding，顺序是：上、右、下、左
+                            imgIcon.setPreserveRatio(true);
+                            imgIcon.setSmooth(true);
+                            imgIcon.setCache(true);
+                            this.setStyle("-fx-alignment: center");
+                            this.setGraphic(imgIcon);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            };
+            return cell;
+        });
+
         TableColumn<Person, String> firstNameCol = new TableColumn<>("First Name");
         // 设置宽度
         firstNameCol.setMinWidth(100);
@@ -94,7 +135,27 @@ public class Main extends Application {
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<>("firstName"));
         // 设置为可编辑的
-        firstNameCol.setCellFactory(TextFieldTableCell.<Person>forTableColumn());
+        firstNameCol.setCellFactory((col) -> {
+            TableCell<Person, String> cell = new TableCell<Person, String>() {
+
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+
+                    if (!empty) {
+                        String fName = this.getTableView().getItems().get(this.getIndex()).getFirstName();
+                        this.setText(fName);
+                        if (fName.equals("void")) {
+                            this.setStyle("-fx-background-color: red");
+                        }
+                    }
+                }
+
+            };
+            return cell;
+        });
         firstNameCol.setOnEditCommit(
                 (TableColumn.CellEditEvent<Person, String> t) -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setFirstName(t.getNewValue()));
@@ -118,10 +179,10 @@ public class Main extends Application {
         // 设置数据源
         table.setItems(data);
         // 一次添加列进TableView
-        table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+        table.getColumns().addAll(iconCol, firstNameCol, lastNameCol, emailCol);
 
         // grid.add(table, 0, 0);
-        grid.add(table, 0, 1, 4, 1);
+        grid.add(table, 0, 1, 5, 1);
 
 
         // 创建3个文本编辑框
@@ -145,7 +206,7 @@ public class Main extends Application {
         // 设置按钮的事件响应
         addButton.setOnAction((ActionEvent e) -> {
             // 数据源添加一行
-            data.add(new Person(
+            data.add(new Person("https://fanyi.bdstatic.com/static/translation/img/header/logo_cbfea26.png",
                     addFirstName.getText(),
                     addLastName.getText(),
                     addEmail.getText()
@@ -223,7 +284,7 @@ public class Main extends Application {
         menuBar.getMenus().addAll(menu2, menu3, menu4);
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
         // 菜单按钮
-        grid.add(menuBar, 0, 0,4, 1);
+        grid.add(menuBar, 0, 0, 4, 1);
 
         // 列表框添加右键菜单
         table.setOnContextMenuRequested(event -> contextMenu.show(table, event.getScreenX(), event.getScreenY()));

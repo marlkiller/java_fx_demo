@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Person {
 
+    private String icon;
     private SimpleStringProperty firstName;
     private SimpleStringProperty lastName;
     private SimpleStringProperty email;
@@ -12,10 +13,19 @@ public class Person {
 
     }
 
-     Person(String fName, String lName, String email) {
+    Person(String icon, String fName, String lName, String email) {
+        this.icon = icon;
         this.firstName = new SimpleStringProperty(fName);
         this.lastName = new SimpleStringProperty(lName);
         this.email = new SimpleStringProperty(email);
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getFirstName() {
