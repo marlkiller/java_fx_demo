@@ -1,6 +1,9 @@
 package sample;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+import java.util.UUID;
 
 public class Person {
 
@@ -9,8 +12,14 @@ public class Person {
     private SimpleStringProperty lastName;
     private SimpleStringProperty email;
 
+    private  StringProperty choiceValue = new SimpleStringProperty();
+
     Person() {
 
+    }
+
+    public Person(String choiceValue) {
+        this.choiceValue.set(choiceValue);
     }
 
     Person(String icon, String fName, String lName, String email) {
@@ -18,6 +27,20 @@ public class Person {
         this.firstName = new SimpleStringProperty(fName);
         this.lastName = new SimpleStringProperty(lName);
         this.email = new SimpleStringProperty(email);
+        this.choiceValue.set(UUID.randomUUID().toString());
+    }
+
+
+    public String getChoiceValue() {
+        return choiceValue.get();
+    }
+
+    public StringProperty choiceValueProperty() {
+        return choiceValue;
+    }
+
+    public void setChoiceValue(String choiceValue) {
+        this.choiceValue.set(choiceValue);
     }
 
     public String getIcon() {

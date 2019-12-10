@@ -306,6 +306,25 @@ public class Main extends Application {
                 });
 
         choiceBox.setTooltip(new Tooltip("Select a Pro"));
+
+        // choiceBox bind object
+
+        // ObservableList<Person> items = FXCollections.observableArrayList(
+        //         e -> new Observable[] {e.choiceValueProperty()} );
+        // items.addAll(data.toArray(new Person[] {}));
+        // ChoiceBox<Person> choiceBox = new ChoiceBox<Person>(items);
+        // StringConverter<Person> converter = new StringConverter<Person>() {
+        //     @Override
+        //     public String toString(Person album) {
+        //         return album != null ? album.getChoiceValue() : null;
+        //     }
+        //     @Override
+        //     public Person fromString(String string) {
+        //         return null;
+        //     }
+        //
+        // };
+        // choiceBox.setConverter(converter);
         grid.add(choiceBox, 0, 3);
 
 
