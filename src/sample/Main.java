@@ -39,6 +39,7 @@ public class Main extends Application {
 
 
         Scene scene = new Scene(grid, 300, 300);//新建Scene，并将网格式Panel置于其中
+        scene.getStylesheets().add(Main.class.getClassLoader().getResource("Login.css").toExternalForm());
         primaryStage.setScene(scene);//设置场景
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
@@ -46,7 +47,7 @@ public class Main extends Application {
                 Platform.exit();
             }
         });
-        primaryStage.getIcons().add(new Image("file:C:\\Users\\void\\Pictures\\Camera Roll\\ma.jpg"));
+        primaryStage.getIcons().add(new Image(Main.class.getClassLoader().getResource("icon.jpg").toString()));
         primaryStage.show();
 
         loginWin(grid);
@@ -202,6 +203,8 @@ public class Main extends Application {
 
     private void loginWin(GridPane grid) {
         Text scenetitle = new Text("欢迎标题");
+        scenetitle.setId("welcome-text");
+
         //scenetitle.setFont(Font.font("Times New Roman", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
@@ -227,6 +230,7 @@ public class Main extends Application {
         grid.add(hbBtn, 1, 4);//将HBox pane放到grid中的第1列，第4行
 
         final Text actiontarget = new Text();//增加用于显示信息的文本
+        actiontarget.setId("actiontarget");
         grid.add(actiontarget, 1, 6);
 
 
@@ -235,6 +239,7 @@ public class Main extends Application {
             actiontarget.setFill(Color.FIREBRICK);//将文字颜色变成 firebrick red
             actiontarget.setText("登录中...");
 
+            System.out.println(userTextField.getText() + ":" + pwBox.getText());
 
             // 创建新的stage
             Stage secondStage = new Stage();
