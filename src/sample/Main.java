@@ -109,10 +109,9 @@ public class Main extends Application {
                             imgIcon.setFitHeight(100);
                             imgIcon.setFitWidth(100);
                             // 保留 width：height 比率
-                            imgIcon.setPreserveRatio(true);
+                            imgIcon.setPreserveRatio(false);
                             // Button delBtn = new Button("删除", imgIcon);
                             // imgIcon.setPadding(new Insets(25, 25, 25, 25));//设置Padding，顺序是：上、右、下、左
-                            imgIcon.setPreserveRatio(true);
                             imgIcon.setSmooth(true);
                             imgIcon.setCache(true);
                             this.setStyle("-fx-alignment: center");
@@ -148,7 +147,8 @@ public class Main extends Application {
                         String fName = this.getTableView().getItems().get(this.getIndex()).getFirstName();
                         this.setText(fName);
                         if (fName.equals("void")) {
-                            this.setStyle("-fx-background-color: red");
+                            // this.setStyle("-fx-background-color: red");
+                            this.setTextFill(Color.RED);
                         }
                     }
                 }

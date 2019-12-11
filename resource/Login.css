@@ -1,31 +1,62 @@
 
-
 root {
     display: block;
 }
 
+
+/*设置表格头靠左、字体大小，字体颜色, 表头默认居中*/
+.table-view .column-header .label {
+    -fx-alignment: center-left;
+    -fx-font-family: "Arial";
+    -fx-text-fill: rgba(68, 68, 68, 0.96);
+    -fx-font-size: 12;
+}
+
+/*设置表格头高度*/
+.table-view > .column-header-background {
+    -fx-pref-height: 40px;
+}
+
+/*设置每一列内容垂直居中，每一行高度*/
+.table-row-cell {
+    -fx-cell-size: 45px;
+    -fx-alignment: center;
+}
+
+#tableView {
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: white;
+    -fx-alignment: center-left;
+}
+
+/*设置每一列内容水平向左居中*/
+#tableView .table-column {
+    -fx-alignment: center-left;
+}
+
+
 .root {
-     -fx-background-image: url("background.jpg");
+    -fx-background-image: url("background.jpg");
 }
 
 .label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
-    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1);
 }
 
 #welcome-text {
-   -fx-font-size: 32px;
-   -fx-font-family: "Arial Black";
-   -fx-fill: #818181;
-   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+    -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: #818181;
+    -fx-effect: innershadow(three-pass-box, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2);
 }
 
 #actiontarget {
-  -fx-fill: FIREBRICK;
-  -fx-font-weight: bold;
-  -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+    -fx-fill: FIREBRICK;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1);
 }
 
 .button {
@@ -33,7 +64,7 @@ root {
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
     -fx-background-color: linear-gradient(#61a2b1, #2A5058);
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
 }
 
 .button:hover {
