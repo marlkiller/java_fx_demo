@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="sample.Controller">
+    <children>
+        <TableView GridPane.columnSpan="4">
+            <columns>
+                <TableColumn minWidth="100.0" text="icon"/>
+                <TableColumn minWidth="100.0" text="lastName"/>
+                <TableColumn minWidth="100.0" text="firstName"/>
+            </columns>
+        </TableView>
+        <TextField GridPane.rowIndex="1"/>
+        <TextField layoutX="35.0" layoutY="449.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <TextField layoutX="347.0" layoutY="449.0" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+        <Button fx:id="btnId" mnemonicParsing="false" onAction="#btnAction" onMouseClicked="#btnClick" text="Button"
+                GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints/>
+        <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+    </padding>
+    <opaqueInsets>
+        <Insets/>
+    </opaqueInsets>
+</GridPane>

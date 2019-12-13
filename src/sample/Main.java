@@ -33,9 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-// http://www.javafxchina.net/blog/docs/tutorial3/
-//打包 exe https://code.makery.ch/zh-cn/library/javafx-tutorial/part7/
+// https://zhuanlan.zhihu.com/p/30386925
 public class Main extends Application {
 
     private final TableView<Person> table = new TableView<>();
