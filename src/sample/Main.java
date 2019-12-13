@@ -39,15 +39,24 @@ public class Main extends Application {
     private final TableView<Person> table = new TableView<>();
     final HBox hb = new HBox();
 
+
+    List<Person> list = new ArrayList<>(Arrays.asList(new Person("https://img2018.cnblogs.com/blog/1309478/201905/1309478-20190503124346847-433585445.png", "Jacob", "Smith", "jacob.smith@example.com"),
+            new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Isabella", "Johnson", "isabella.johnson@example.com"),
+            new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Ethan", "Williams", "ethan.williams@example.com"),
+            new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "void", "Jones", "emma.jones@example.com"),
+            new Person("https://fanyi.bdstatic.com/static/translation/img/header/logo_cbfea26.png", "Michael", "Brown", "michael.brown@example.com")));
+
+    private final ObservableList<Person> data = FXCollections.observableList(list);
+
     // 数据源
-    private final ObservableList<Person> data =
-            FXCollections.observableArrayList(
-                    new Person("https://img2018.cnblogs.com/blog/1309478/201905/1309478-20190503124346847-433585445.png", "Jacob", "Smith", "jacob.smith@example.com"),
-                    new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Isabella", "Johnson", "isabella.johnson@example.com"),
-                    new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Ethan", "Williams", "ethan.williams@example.com"),
-                    new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "void", "Jones", "emma.jones@example.com"),
-                    new Person("https://fanyi.bdstatic.com/static/translation/img/header/logo_cbfea26.png", "Michael", "Brown", "michael.brown@example.com")
-            );
+    // private final ObservableList<Person> data =
+    //         FXCollections.observableArrayList(
+    //                 new Person("https://img2018.cnblogs.com/blog/1309478/201905/1309478-20190503124346847-433585445.png", "Jacob", "Smith", "jacob.smith@example.com"),
+    //                 new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Isabella", "Johnson", "isabella.johnson@example.com"),
+    //                 new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "Ethan", "Williams", "ethan.williams@example.com"),
+    //                 new Person("https://dn-qiniu-avatar.qbox.me/avatar/8d693b2028982e73644044bd01a01b27?qiniu-avatar&t=190716", "void", "Jones", "emma.jones@example.com"),
+    //                 new Person("https://fanyi.bdstatic.com/static/translation/img/header/logo_cbfea26.png", "Michael", "Brown", "michael.brown@example.com")
+    //         );
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -81,6 +90,21 @@ public class Main extends Application {
 
 
         primaryStage.show();
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run () {
+                try {
+                    Thread.sleep(3000);
+                    list.add(new Person("https://img2018.cnblogs.com/blog/1309478/201905/1309478-20190503124346847-433585445.png", "fuckList", "Smith", "jacob.smith@example.com"));
+                    data.add(new Person("https://img2018.cnblogs.com/blog/1309478/201905/1309478-20190503124346847-433585445.png", "fuckData", "Smith", "jacob.smith@example.com"));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void tableWin(GridPane grid, Stage primaryStage) {
